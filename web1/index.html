@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cooking w yo mama</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@300;400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <h1>Cooking w yo mama</h1>
+        <nav>
+            <a onclick="goHome()" class="home-button">Home</a>
+        </nav>
+    </header>
+    <img src="https://laurasambitiouswriting.wordpress.com/wp-content/uploads/2020/02/cooking-mama.png" alt="Cooking w yo mama" class="main-image">
+    <main>
+    
+        <div class="intro">
+            <h2>Welcome to Cooking w yo mama!</h2>
+            <div class="search-bar">
+                <input 
+                    type="text" 
+                    id="searchInput" 
+                    placeholder="Just fucking search b!tch" 
+                    onkeypress="handleEnter(event)"
+                >
+                <button onclick="searchRecipes()">Enter</button>
+            </div>
+            <p>Discover recipes based on the ingredients you broke ass b have at home and enjoy cooking!</p>
+            <p>Start by entering ingredients or recipe names in the search bar above.</p>
+        </div>
+    </main>
+    <footer>
+        <p>Happy cooking dumbass!</p>
+    </footer>
+    <script>
+        function handleEnter(event) {
+            if (event.key === 'Enter') {
+                searchRecipes();
+            }
+        }
+
+        function searchRecipes() {
+            const query = document.getElementById('searchInput').value;
+            if (query.trim() !== '') {
+                window.location.href = `recipe.html?query=${encodeURIComponent(query)}`;
+            }
+        }
+
+        function goHome() {
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+</html>
