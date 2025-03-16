@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recipe Search - Cooking w yo mama</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@300;400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <h1>Cooking w yo mama</h1>
+        <nav>
+            <a onclick="goHome()" class="home-button">Home</a>
+        </nav>
+    </header>
+    <div class="search-bar">
+        <input 
+            type="text" 
+            id="searchInput" 
+            placeholder="Still not what you ho wanted???" 
+            onkeypress="handleEnter(event)"
+        >
+        <button onclick="searchRecipes()">Enter</button>
+    </div>
+    <main>
+        <div id="recipe-detail">
+            <!-- Recipe details will be dynamically inserted here -->
+        </div>
+    </main>
+    <footer>
+        <p>Happy Cooking!</p>
+    </footer>
+    <script>
+        const recipeApiKey = 'a3dd4396baab44cbac2800488cac9423'; // New API key
+        
+        function handleEnter(event) {
+            if (event.key === 'Enter') {
+                searchRecipes();
+            }
+        }
+    
+        function searchRecipes() {
+            const query = document.getElementById('searchInput').value;
+            if (query.trim() !== '') {
+                window.location.href = `recipe.html?query=${encodeURIComponent(query)}`;
+            }
+        }
+    
+        const query = new URLSearchParams(window.location.search).get('query');
+    
+        if (query) {
+            fetchRecipes(query);
+        }
+    
+        function fetchRecipes(query) {
+            fetch(`https://api.spoonacular.com/recipes/complexSearch?query=${query}&apiKey=${recipeApiKey}`)
+                .then(response => response.json())
+                .then(data => {
+                    let recipes = data.results;
+                    if (recipes.length === 0) {
+                        document.getElementById('recipe-detail').innerHTML = '<p>No recipes found.</p>';
+                    } else {
+                        recipes.forEach(recipe => displayRecipe(recipe));
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching recipes:', error);
+                    document.getElementById('recipe-detail').innerHTML = '<p>Error fetching recipes. Please try again later.</p>';
+                });
+        }
+    
+        function displayRecipe(recipe) {
+            const recipeDiv = document.createElement('div');
+            recipeDiv.className = 'recipe-card';
+            recipeDiv.innerHTML = `
+                <img src="${recipe.image}" alt="${recipe.title}">
+                <div class="recipe-info">
+                    <h2>${recipe.title}</h2>
+                    <button onclick="viewRecipe(${recipe.id})">View Recipe</button>
+                </div>
+            `;
+            document.getElementById('recipe-detail').appendChild(recipeDiv);
+        }
+    
+        function viewRecipe(id) {
+            window.location.href = `recipe-view.html?id=${id}`;
+        }
+    
+        function goHome() {
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+</html>
